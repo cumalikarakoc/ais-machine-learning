@@ -13,7 +13,7 @@ library(ggplot2)
 ggplot(OnderwijsEenheidResultaten_df,aes(x=TeBehalenStpt)) +
   geom_histogram(bins = 1, binwidth = 1
                  ,color="Black",
-                 fill="#069e64") +
+                 fill="#54a684") +
   scale_y_continuous(name="Count",
                      breaks= seq(0, 3500, 500)) +
   theme_bw()
@@ -22,7 +22,7 @@ ggplot(OnderwijsEenheidResultaten_df,aes(x=TeBehalenStpt)) +
 ggplot(OnderwijsEenheidResultaten_df,aes(x=Resultaat)) +
   geom_histogram(bins = 1, binwidth = 1
                  ,color="Black",
-                 fill="#069e64") +
+                 fill="#54a684") +
   scale_y_continuous(name="Count",
                      breaks= seq(0, 3500, 500)) +
   scale_x_continuous(name="Resultaat",
@@ -35,7 +35,7 @@ ggplot(OnderwijsEenheidResultaten_df,aes(x=Resultaat)) +
 ggplot(OnderwijsEenheidResultaten_df,aes(x=OnderwijsEenheid)) +
   geom_bar(width = 0.4
            ,color="Black",
-           fill="#069e64") +
+           fill="#54a684") +
   scale_y_continuous(name="Count",
                      breaks= seq(0, 1000,100)) +
   theme_bw()
