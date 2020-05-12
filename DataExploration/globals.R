@@ -32,7 +32,7 @@ ggplot_cont <- function(df, column, x_name) {
 }
 
 ##barplots for categorical features
-ggplot_cat <- function(df, column, breaks, text_angle=0) {
+ggplot_cat <- function(df, column, x_name, breaks, text_angle=0) {
   return (
     ggplot(df, aes(x = column)) +
       geom_bar(color = "Black",
@@ -40,6 +40,8 @@ ggplot_cat <- function(df, column, breaks, text_angle=0) {
       scale_y_continuous(name = "Count",
                          breaks = breaks) +
       theme_bw()+
+      labs(x=x_name)+
       theme(axis.text.x = element_text(angle = text_angle, hjust = 1))
   )
 }
+
