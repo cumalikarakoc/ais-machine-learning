@@ -9,22 +9,22 @@ ggplot_cont(inschrijvingen_df, LeeftijdStudent_op_Totdatum, "LeeftijdStudent_op_
 
 ##Categorical Features
 #Opleidingsvorm
-ggplot_cat(inschrijvingen_df, Opleidingsvorm, seq(0, 3500, 500))
+ggplot_cat(inschrijvingen_df, Opleidingsvorm, "Opleidingsvorm", seq(0, 3500, 500))
 
 #InschrijfLocatie
-ggplot_cat(inschrijvingen_df, InschrijfLocatie, seq(0, 3500, 500))
+ggplot_cat(inschrijvingen_df, InschrijfLocatie, "InschrijfLocatie", seq(0, 3500, 500))
 
 #VanDatum
-ggplot_cat(inschrijvingen_df, VanDatum, seq(0, 3500, 500))
+ggplot_cat(inschrijvingen_df, VanDatum, "VanDatum", seq(0, 1000, 100))
 
 #TotDatum
-ggplot_cat(inschrijvingen_df, TotDatum, seq(0, 3500, 500))
+ggplot_cat(inschrijvingen_df, TotDatum, "TotDatum", seq(0, 300, 50))
 
 #InschrijfStatus
-ggplot_cat(inschrijvingen_df, InschrijfStatus, seq(0, 3500, 500))
+ggplot_cat(inschrijvingen_df, InschrijfStatus, "InschrijfStatus", seq(0, 1000, 200))
 
 #StudieUitslagsoort
-ggplot_cat(inschrijvingen_df, StudieUitslagsoort, seq(0, 3500, 500), 45)
+ggplot_cat(inschrijvingen_df, StudieUitslagsoort, "StudieUitslagsoort", seq(0, 400, 100), 45)
 
 #StudieUitslag
-ggplot_cat(inschrijvingen_df, StudieUitslag, seq(0, 3500, 500), 90)
+ggplot_cat(inschrijvingen_df, StudieUitslag, "StudieUitslag", seq(0, 500, 100), 90)
