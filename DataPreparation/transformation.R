@@ -7,14 +7,33 @@ sql_conn <- odbcConnect("SAS_ML_FILTERED")
 #===============================
 #======= Inschrijvingen ========
 #===============================
-inschrijvingen_df <-
+inschrijvingen_raw <-
   sqlQuery(
     sql_conn,
     "Select Student, Opleidingsvorm, InschrijfLocatie, InschrijfStatus,
-                              LeeftijdStudent_op_Vandatum, VanDatum from Inschrijvingen
-where StudieUitslag = 'Positief studieadvies Jr1'"
+                              LeeftijdStudent_op_Vandatum, VanDatum, StudieUitslagsoort, StudieUitslag from Inschrijvingen"
   )
 
+inschrijvingen_df <- inschrijvingen_raw %>%
+  filter(StudieUitslagsoort == 'Einde 1e jaar (oud)') %>%
+  mutate(
+    RisicoStudent = ifelse(
+      StudieUitslag == 'Positief studieadvies Jr1'
+      |
+        StudieUitslag == 'Voorlopig positief studieadvies Jr 1',
+      0,
+      1
+    )
+  )  %>%
+  select(
+    Student,
+    Opleidingsvorm,
+    InschrijfLocatie,
+    LeeftijdStudent_op_Vandatum,
+    InschrijfStatus,
+    VanDatum,
+    RisicoStudent
+  )
 
 #===============================
 #======= Studenten =============
@@ -114,10 +133,30 @@ aanwezigheid_df <-
   select(Student, AanwezigheidsType, Perc) %>%
   spread(AanwezigheidsType, Perc, fill = 0)
 
+
 #===============================
 #====== Merge dataframes =======
 #===============================
 risico_studenten_df <- studenten_df %>%
+  merge(inschrijvingen_df, by = "Student") %>%
+  select(
+    Student,
+    RisicoStudent,
+    Geslacht,
+    Vooropleidingniveau,
+    Vooropleiding,
+    Vooropl_diplomadatum,
+    Vooropleidingplaats,
+    Opleidingsvorm,
+    InschrijfLocatie,
+    LeeftijdStudent_op_Vandatum,
+    InschrijfStatus,
+    VanDatum
+  ) %>%
   merge(onderwijseenheidsResultaten_df, by = "Student") %>%
   merge(toetsResultaten_df, by = "Student") %>%
   merge(aanwezigheid_df, by = "Student")
+
+dim(risico_studenten_df)
+hist(risico_studenten_df$RisicoStudent)
+str(risico_studenten_df)
