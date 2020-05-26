@@ -11,7 +11,19 @@ inschrijvingen_df <-
   sqlQuery(
     sql_conn,
     "Select Student, Opleidingsvorm, InschrijfLocatie, InschrijfStatus,
-                              LeeftijdStudent_op_Vandatum, VanDatum from Inschrijvingen"
+                              LeeftijdStudent_op_Vandatum, VanDatum from Inschrijvingen
+where StudieUitslag = 'Positief studieadvies Jr1'"
+  )
+
+
+#===============================
+#======= Studenten =============
+#===============================
+studenten_df <-
+  sqlQuery(
+    sql_conn,
+    "Select id as Student, Geslacht, Vooropleidingniveau, Vooropleiding, Vooropl_diplomadatum, Vooropleidingplaats
+from SAS_ML_FILTERED.dbo.Studenten"
   )
 
 #===============================
@@ -101,3 +113,11 @@ aanwezigheid_df <-
   mutate(Perc = round(100 * n / sum(n), 2)) %>%
   select(Student, AanwezigheidsType, Perc) %>%
   spread(AanwezigheidsType, Perc, fill = 0)
+
+#===============================
+#====== Merge dataframes =======
+#===============================
+risico_studenten_df <- studenten_df %>%
+  merge(onderwijseenheidsResultaten_df, by = "Student") %>%
+  merge(toetsResultaten_df, by = "Student") %>%
+  merge(aanwezigheid_df, by = "Student")
