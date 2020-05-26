@@ -1,5 +1,6 @@
 library(RODBC)
 library(dplyr)
+library(tidyr)
 
 sql_conn <- odbcConnect("SAS_ML_FILTERED")
 
@@ -30,19 +31,30 @@ nrToetscijfers <- onderwijseenheidsResultaten_raw %>%
          WT_NrToetscijfers = WT)
 
 onderwijseenheidsResultaten_df <- merge(resultaat, nrToetscijfers, by="Student")
-## 13 NA rows for saq or spd
-onderwijseenheidsResultaten_df %>%
-  filter(is.na(SAQ) || is.na(SPD)) %>%
-  tally()
 
 
 #===============================
 #====== ToetsResultaten ========
 #===============================
-toetsResultaten_df <- sqlQuery(sql_conn, "Select Student, OnderwijsEenheid, Resultaat, Onvoldoende,
+toetsResultaten_raw <- sqlQuery(sql_conn, "Select Student, OnderwijsEenheid, Resultaat, Onvoldoende
                                            from ToetsResultaten")
 
+# resultaat_toets <-
+  toetsResultaten_raw %>%
+  group_by(Student) %>%
+  select(Student, OnderwijsEenheid, Resultaat) 
+  # %>%
+  spread(OnderwijsEenheid, Resultaat)%>%  rename(DB_Resultaat = DB, SAQ_Resultaat = SAQ, SPD_Resultaat = SPD,
+         WT_Resultaat = WT)
 
+onvoldoendes <- onderwijseenheidsResultaten_raw %>%
+  group_by(Student) %>%
+  select(Student, OnderwijsEenheid, NrToetscijfers) %>%
+  spread(OnderwijsEenheid, NrToetscijfers) %>%
+  rename(DB_NrToetscijfers = DB, SAQ_NrToetscijfers = SAQ, SPD_NrToetscijfers = SPD,
+         WT_NrToetscijfers = WT)
+
+onderwijseenheidsResultaten_df <- merge(resultaat, nrToetscijfers, by="Student")
 #===============================
 #====== Aanwezigheid ===========
 #===============================
