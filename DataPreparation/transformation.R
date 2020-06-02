@@ -157,6 +157,7 @@ risico_studenten_df <- studenten_df %>%
   merge(toetsResultaten_df, by = "Student") %>%
   merge(aanwezigheid_df, by = "Student")
 
+# rename column with whitespace
 risico_studenten_df <- risico_studenten_df %>%
   rename(
     Te_Laat = `Te laat`
