@@ -41,8 +41,7 @@ inschrijvingen_df <- inschrijvingen_raw %>%
 studenten_df <-
   sqlQuery(
     sql_conn,
-    "Select id as Student, Geslacht, Vooropleidingniveau, Vooropleiding, Vooropl_diplomadatum, Vooropleidingplaats
-from SAS_ML_FILTERED.dbo.Studenten"
+    "Select id as Student, Geslacht, Vooropleidingniveau from SAS_ML_FILTERED.dbo.Studenten"
   )
 
 #===============================
@@ -144,14 +143,10 @@ risico_studenten_df <- studenten_df %>%
     RisicoStudent,
     Geslacht,
     Vooropleidingniveau,
-    Vooropleiding,
-    Vooropl_diplomadatum,
-    Vooropleidingplaats,
     Opleidingsvorm,
     InschrijfLocatie,
     LeeftijdStudent_op_Vandatum,
-    InschrijfStatus,
-    VanDatum
+    InschrijfStatus
   ) %>%
   merge(onderwijseenheidsResultaten_df, by = "Student") %>%
   merge(toetsResultaten_df, by = "Student") %>%
