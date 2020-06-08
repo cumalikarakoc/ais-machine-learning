@@ -1,6 +1,5 @@
-
 set.seed(1)
-# remove the columns that cause problems due to high number of levels: vooropleiding, vooropleidingdiplomadatum en vooropleidingplaats
+# replace NA with 0
 risico_studenten_df_dt <- risico_studenten_df %>%
   replace(is.na(.), 0)
 
