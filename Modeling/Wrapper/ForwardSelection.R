@@ -31,11 +31,11 @@ Blok1fs.FitBest <- glm(formula = RisicoStudent ~ SPD_Resultaat + SAQ_Onvoldoende
 
 Blok1fs.Predict <- predict(Blok1fs.FitBest, newdata=Blok1.test)
 Blok1fs.Predict <- round(Blok1fs.Predict)
-confusionMatrix(data=as.factor(Blok1fs.Predict), reference=Blok1.test_Risico) #0.8376
+confusionMatrix(data=as.factor(Blok1fs.Predict), reference=Blok1.test_Risico, positive = "1") #0.8376
 
 Blok1All.Predict <- predict(Blok1.FitAll, newdata=Blok1.test)
 Blok1All.Predict <- round(Blok1All.Predict)
-confusionMatrix(data=as.factor(Blok1All.Predict), reference=Blok1.test_Risico) #0.8504
+confusionMatrix(data=as.factor(Blok1All.Predict), reference=Blok1.test_Risico, positive = "1") #0.8504
 
 #===============================
 # Recursive Feature Elimination
@@ -74,11 +74,11 @@ Blok1_2fs.FitBest <- glm(formula = RisicoStudent ~ WT_Resultaat + InschrijfStatu
 
 Blok1_2fs.Predict <- predict(Blok1_2fs.FitBest, newdata=Blok1_2.test)
 Blok1_2fs.Predict <- round(Blok1_2fs.Predict)
-confusionMatrix(data=as.factor(Blok1_2fs.Predict), reference=Blok1_2.test_Risico) #0.8504
+confusionMatrix(data=as.factor(Blok1_2fs.Predict), reference=Blok1_2.test_Risico, positive = "1") #0.8504
 
 Blok1_2All.Predict <- predict(Blok1_2.FitAll, newdata=Blok1_2.test)
 Blok1_2All.Predict <- round(Blok1_2All.Predict)
-confusionMatrix(data=as.factor(Blok1_2All.Predict), reference=Blok1_2.test_Risico) #0.859
+confusionMatrix(data=as.factor(Blok1_2All.Predict), reference=Blok1_2.test_Risico, positive = "1") #0.859
 
 #===============================
 # Recursive Feature Elimination
