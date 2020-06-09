@@ -19,7 +19,7 @@ str(risico_studenten_df_dt)
 
 # split data into training and test datasets in 60:40 ratio
 indexes <-
-  sample(1:nrow(risico_studenten_df),
+  sample(1:nrow(risico_studenten_df_dt),
          size = 0.6 * nrow(risico_studenten_df_dt))
 train_data <- risico_studenten_df_dt[indexes, ]
 test_data <- risico_studenten_df_dt[-indexes, ]

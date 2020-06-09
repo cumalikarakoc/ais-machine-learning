@@ -6,128 +6,111 @@ library(caret)
 library(e1071)
 library(scales)
 
-#risico_studenten_df1 <- na.omit(risico_studenten_df)
+risico_studenten <- risico_studenten_df_dt
 
-#GeslagdOfNiet <- ifelse(risico_studenten_df1$RisicoStudent >0.5, "geslagd", "gezakt")
-#risico_studenten<-data.frame(risico_studenten_df1,GeslagdOfNiet) 
-#
-## Alle megelijke kolommen
-risico_studenten<-risico_studenten_df[,c("RisicoStudent","Student" ,"Geslacht","Vooropleidingniveau",
-                                             "Vooropl_diplomadatum","LeeftijdStudent_op_Vandatum",
-                                             "InschrijfLocatie","VanDatum", "DB_Resultaat", "SAQ_Resultaat",
-                                             "SPD_Resultaat","WT_Resultaat", "DB_NrToetscijfers", 
-                                             "SAQ_NrToetscijfers", "SPD_NrToetscijfers","WT_NrToetscijfers",
-                                             "DB_Gemiddeld", "SAQ_Gemiddeld", "SPD_Gemiddeld","WT_Gemiddeld",
-                                             "DB_Onvoldoendes","SAQ_Onvoldoendes","SPD_Onvoldoendes",
-                                             "WT_Onvoldoendes", "Aanwezig", "Afwezig", "Te_Laat") ]
-# Accuracy : 0.8632
-##Percentage P-rendement 78.63%
+str(risico_studenten)
 
-#geiflterde kolommen 
-risico_studenten<-risico_studenten_df[,c("RisicoStudent","Student" ,"Vooropleidingniveau",
-                                             "LeeftijdStudent_op_Vandatum",
-                                             "VanDatum", "DB_Resultaat", "SAQ_Resultaat",
-                                             "SPD_Resultaat","WT_Resultaat", "DB_NrToetscijfers", 
-                                             "SAQ_NrToetscijfers", "SPD_NrToetscijfers","WT_NrToetscijfers",
-                                             "DB_Gemiddeld", "SAQ_Gemiddeld", "SPD_Gemiddeld","WT_Gemiddeld",
-                                             "DB_Onvoldoendes","SAQ_Onvoldoendes","SPD_Onvoldoendes",
-                                             "WT_Onvoldoendes", "Aanwezig", "Afwezig", "Te_Laat") ]
-##Accuraccy: 0.8675
-
-
-#geiflterde kolommen0 
-risico_studenten<-risico_studenten_df[,c("RisicoStudent","Student","LeeftijdStudent_op_Vandatum",
-                                             "DB_Resultaat", "SAQ_Resultaat","SPD_Resultaat",
-                                             "WT_Resultaat", "WT_NrToetscijfers","SAQ_Gemiddeld",
-                                             "WT_Gemiddeld","DB_Onvoldoendes","SAQ_Onvoldoendes",
-                                             "SPD_Onvoldoendes","WT_Onvoldoendes","Aanwezig", "Te_Laat") ]
-##Accuracy : 0.8718 
-
-#geiflterde kolommen
-risico_studenten<-risico_studenten_df[,c("RisicoStudent","Student","LeeftijdStudent_op_Vandatum","VanDatum",
-                                             "DB_Resultaat", "SAQ_Resultaat","SPD_Resultaat",
-                                             "WT_Resultaat", "WT_NrToetscijfers","DB_Gemiddeld", "SAQ_Gemiddeld", 
-                                         "SPD_Gemiddeld","WT_Gemiddeld","DB_Onvoldoendes","SAQ_Onvoldoendes",
-                                             "SPD_Onvoldoendes","WT_Onvoldoendes","Aanwezig", "Te_Laat","Afwezig") ]
-##Accuracy : 0.8761
-
-#geiflterde kolommen met alleen de eeste twee vakken SPD en WT, om Zo vroeg mogelijk te predicten
-risico_studenten<-risico_studenten_df[,c("RisicoStudent","Student","VanDatum", 
-                                         "SAQ_Resultaat","SPD_Resultaat",
-                                         "SPD_NrToetscijfers","SAQ_NrToetscijfers","SPD_Gemiddeld",
-                                         "SAQ_Gemiddeld",
-                                         "SAQ_Onvoldoendes","SPD_Onvoldoendes", 
-                                         "Aanwezig","Afwezig", "Te_Laat") ]
-#Accuracy : 0.856
-
-#geiflterde kolommen1
-risico_studenten<-risico_studenten_df[,c("RisicoStudent","Student","VanDatum","DB_Resultaat", 
-                                             "SAQ_Resultaat","SPD_Resultaat","WT_Resultaat",
-                                             "WT_NrToetscijfers","DB_Gemiddeld", "SAQ_Gemiddeld", 
-                                             "SPD_Gemiddeld","WT_Gemiddeld","DB_Onvoldoendes",
-                                             "SAQ_Onvoldoendes","SPD_Onvoldoendes","WT_Onvoldoendes", 
-                                             "Aanwezig", "Te_Laat") ]
-#Accuracy : 0.8761
-
-
-# Check of kolommen namen kloppen
-colnames(risico_studenten)
-
-risico_studenten[is.na(risico_studenten)] <- 0
-
-# Split the data into training and test set
-set.seed(2)
-inTrain<- sample(1:nrow(risico_studenten), size=0.6*nrow(risico_studenten))
-
-#Making a train and test sets
-train <- risico_studenten[inTrain,]
-test <-  risico_studenten[-inTrain,]
-
-
-x <-model.matrix(train$RisicoStudent~.,train)[,-1]
-y<-train$RisicoStudent
-
-#alpha=1 to use Lasso regression
-glm<- glmnet(x, y, family = "binomial", alpha = 1, lambda = NULL)
-
-summary(glm)
+#Make a matrix from the train_data to use it in the glmnet model
+train_matrix <-model.matrix(train_data$RisicoStudent~.,train_data)[,-2]
+train_risicoStudent<-train_data$RisicoStudent
 
 # Find the best lambda using cross-validation
-set.seed(2) 
-cv <- cv.glmnet(x, y, alpha = 1)
+cv <- cv.glmnet(train_matrix, train_risicoStudent, alpha = 1, family="binomial")
 
 # Display the best lambda value
 Best_lam <- cv$lambda.min
 
-
 # Fit the final model on the training data with best lambda value
-model <- glmnet(x, y, alpha = 1, lambda = Best_lam)
+model_glmnet <- glmnet(train_matrix, train_risicoStudent, alpha = 1, lambda = Best_lam, 
+                family="binomial")
 
-# Dsiplay regression coefficients
-co<-coef(model,exact = FALSE)
-co
-inds<-which(co!=0)
-variables<-row.names(co)[inds]
-variables<-variables[!(variables %in% '(Intercept)')];
+#Make a matrix from the test data to use it in the prediction
+test_matrix <- model.matrix(test_data$RisicoStudent ~., test_data)[,-2]
 
 # Make predictions on the test data
-x.test <- model.matrix(test$RisicoStudent ~., test)[,-1]
-predictions <- model %>% predict(x.test) %>% as.vector() 
-predictions<-round(predictions, digits = 0)
-
-#lasso.coef=predict (out ,type =" coefficients",s=bestlam )[1:20 ,]
-# Model performance metrics
-data.frame(
-  RMSE = RMSE(predictions, test$RisicoStudent),
-  Rsquare = R2(predictions, test$RisicoStudent)
-)
+predictions<- predict(model_glmnet ,test_matrix, type ="class",s=Best_lam )
 
 #confusionMatrix to get the accuracy of the predict
-caret::confusionMatrix(data =as.factor(predictions), reference = as.factor(test$RisicoStudent))
+confusionMatrix(table(predictions,  test_data$RisicoStudent), positive="1")
+
+#the output of confusionMatrix
+#Confusion Matrix and Statistics
+#
+#p     0   1
+#0 165  22
+#1   5  42
+#
+#Accuracy : 0.8846          
+#95% CI : (0.8366, 0.9226)
+#No Information Rate : 0.7265          
+#P-Value [Acc > NIR] : 3.21e-09        
+#
+#Kappa : 0.6834          
+#
+#Mcnemar's Test P-Value : 0.002076        
+#                                          
+#            Sensitivity : 0.6562          
+#            Specificity : 0.9706          
+#         Pos Pred Value : 0.8936          
+#         Neg Pred Value : 0.8824          
+#             Prevalence : 0.2735          
+#         Detection Rate : 0.1795          
+#   Detection Prevalence : 0.2009          
+#      Balanced Accuracy : 0.8134          
+#                                          
+#       'Positive' Class : 1               
+                              
+
+# Dsiplay the regression coefficients
+co<-coef(model_glmnet,exact = FALSE)
+#view the regression coefficients
+co
+
+# Get the names of all features which dose not have 
+#regression coefficient value of 0 
+inds<-which(co!=0)
+selected_features<-row.names(co)[inds]
+selected_features<-selected_features[!(selected_features %in% '(Intercept)')];
+# view the names of those features which are 
+# selected using the regression coefficient
+selected_features
 
 
+#Making target for the train_data and test_data dataset's 
+test_Risico <- as.factor(test_data$RisicoStudent)
+train_Risico <- as.factor(train_data$RisicoStudent)
+
+#To check the effect of LASSO regression we make a logistic regression using GLM
+## Make a model and predictions on all features using GLM
+model_glm <- glm(formula = RisicoStudent ~ ., data=train_data,  family="binomial")
+Predictions_2 <- predict(model_glm, newdata=test_data,type = "response")
+Predictions_2 <- round(Predictions_2)
+confusionMatrix(data=as.factor(Predictions_2), reference=test_Risico, positive = "1") 
 
 
-
-
-
+#Confusion Matrix and Statistics
+#
+#Reference
+#Prediction   0   1
+#0 158  15
+#1  17  44
+#
+#Accuracy : 0.8632          
+#95% CI : (0.8125, 0.9045)
+#No Information Rate : 0.7479          
+#P-Value [Acc > NIR] : 1.141e-05       
+#
+#Kappa : 0.6414          
+#
+#Mcnemar's Test P-Value : 0.8597          
+#                                          
+#            Sensitivity : 0.7458          
+#            Specificity : 0.9029          
+#         Pos Pred Value : 0.7213          
+#         Neg Pred Value : 0.9133          
+#             Prevalence : 0.2521          
+#         Detection Rate : 0.1880          
+#   Detection Prevalence : 0.2607          
+#      Balanced Accuracy : 0.8243          
+#                                          
+#       'Positive' Class : 1       
