@@ -25,10 +25,3 @@ indexes <-
          size = 0.6 * nrow(risico_studenten_df_dt))
 train_data <- risico_studenten_df_dt[indexes, ]
 test_data <- risico_studenten_df_dt[-indexes, ]
-
-
-risico_num <- risico_studenten_df %>%
-  select(-c(1, 2, 3, 4, 5, 6, 8))
-
-pairs(risico_num)
-
