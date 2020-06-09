@@ -9,8 +9,8 @@ OnderwijsEenheidResultaten_df <-
 ####histogrammen
 library(ggplot2)
 
-#TeBehalenStpt
-ggplot(OnderwijsEenheidResultaten_df,aes(x=TeBehalenStpt)) +
+#NrToetscijfers
+ggplot(OnderwijsEenheidResultaten_df,aes(x=NrToetscijfers)) +
   geom_histogram(bins = 1, binwidth = 1
                  ,color="Black",
                  fill="#54a684") +
