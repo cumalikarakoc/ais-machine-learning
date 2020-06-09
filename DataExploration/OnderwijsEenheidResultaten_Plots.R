@@ -18,15 +18,6 @@ ggplot(OnderwijsEenheidResultaten_df,aes(x=NrToetscijfers)) +
                      breaks= seq(0, 3500, 500)) +
   theme_bw()
 
-#TeBehalenStpt
-ggplot(OnderwijsEenheidResultaten_df,aes(x=TeBehalenStpt)) +
-  geom_bar(bins = 1, binwidth = 1
-                 ,color="Black",
-                 fill="#54a684") +
-  scale_y_continuous(name="Count",
-                     breaks= seq(0, 3500, 500)) +
-  theme_bw()
-
 #resultaat
 ggplot(OnderwijsEenheidResultaten_df,aes(x=Resultaat)) +
   geom_histogram(bins = 1, binwidth = 1
