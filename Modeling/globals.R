@@ -1,6 +1,8 @@
 set.seed(1)
 # replace NA with 0
 risico_studenten_df_dt <- risico_studenten_df %>%
+  # uncomment the line below to exclude the features of the 2nd period
+  # select(-c(9, 12, 13, 16, 17, 20, 21, 24))%>%
   replace(is.na(.), 0)
 
 colums_to_factorise <-
