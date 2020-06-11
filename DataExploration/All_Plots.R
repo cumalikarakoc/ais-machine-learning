@@ -130,7 +130,6 @@ ggplot_box(Inschrijvingen_df, LeeftijdStudent_op_Vandatum, seq(0, 50, 5), "Leeft
 ggplot_box(Inschrijvingen_df, LeeftijdStudent_op_Totdatum, seq(0, 50, 5), "LeeftijdStudent_op_Totdatum")
 
 ### OnderwijsEenheidResultaten ###
-OnderwijsEenheidResultaten
 attach(OnderwijsEenheidResultaten_df)
 ## NrToetscijfers
 ggplot_box(OnderwijsEenheidResultaten_df, NrToetscijfers, seq(0, 13, 0.5), "NrToetscijfers")

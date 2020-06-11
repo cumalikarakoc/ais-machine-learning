@@ -78,8 +78,7 @@ ggplot(df, aes(x = column)) +
   theme(axis.title.y = element_blank(),
         axis.text.y = element_blank(),
         axis.ticks.y = element_blank()) +
-  scale_x_continuous(name = "Fixed Acidity",
-                     breaks = breaks) +
-  labs(x=x_name)
+  scale_x_continuous(name = x_name,
+                     breaks = breaks)
   )
 }
