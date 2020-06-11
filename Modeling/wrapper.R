@@ -3,8 +3,7 @@
 #===============================
 library(caret)
 risico_studenten_df[is.na(risico_studenten_df)] = 0
-risico_studenten_df = risico_studenten_df[,-c(5,7)]
-risico_studenten_df_Blok1 = risico_studenten_df[,-c(11,14,15,18,19,22,23,26)]
+risico_studenten_df_Blok1 = risico_studenten_df[,-c(7,10,11,14,15,18,19,22)]
 ctrl <- rfeControl(functions = rfFuncs, method = "cv", number = 10)
 
 #===============================
